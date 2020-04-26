@@ -1,6 +1,8 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG BASE_CONTAINER=jupyter/minimal-notebook
+# This is a fork of Jupyter's Dockerfile repository with minimal modifications to the base docker image.
+
+ARG BASE_CONTAINER=coreyhanson/anacuda-minimal
 FROM $BASE_CONTAINER
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
