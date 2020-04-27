@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 # This is a fork of Jupyter's Dockerfile repository with minimal modifications to the base docker image.
 
-# Ubuntu 18.04 (bionic) CUDA 10.2 Base Image
+# Ubuntu 18.04 (bionic) CUDA 10.1 Base Image
 # OS/ARCH: linux/amd64
 ARG ROOT_CONTAINER=nvidia/cuda:10.2-runtime-ubuntu18.04
 ARG BASE_CONTAINER=$ROOT_CONTAINER
