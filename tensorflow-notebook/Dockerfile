@@ -11,6 +11,8 @@ LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 #From https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/dockerfiles/dockerfiles/gpu.Dockerfile
 # and https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/ubuntu18.04/10.1/devel/cudnn7/Dockerfile
 
+USER root
+
 ARG UBUNTU_VERSION=18.04
 
 ARG ARCH=
@@ -61,11 +63,15 @@ RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/lib
     && echo "/usr/local/cuda/lib64/stubs" > /etc/ld.so.conf.d/z-cuda-stubs.conf \
     && ldconfig
 
+USER $NB_UID
+
 # See http://bugs.python.org/issue19846
 ENV LANG C.UTF-8
 
 RUN pip --no-cache-dir install --upgrade \
-    setuptools
+    setuptools && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
 
 # Some TF tools expect a "python" binary
 RUN ln -s $(which python3) /usr/local/bin/python
