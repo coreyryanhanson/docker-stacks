@@ -4,7 +4,7 @@
 
 # Ubuntu 18.04 (bionic) CUDA 10.1 Base Image
 # OS/ARCH: linux/amd64
-ARG ROOT_CONTAINER=nvidia/cuda:10.2-runtime-ubuntu18.04
+ARG ROOT_CONTAINER=nvidia/cuda:10.1-runtime-ubuntu18.04
 ARG BASE_CONTAINER=$ROOT_CONTAINER
 FROM $BASE_CONTAINER
 
