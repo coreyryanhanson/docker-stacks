@@ -15,16 +15,13 @@ USER root
 
 ARG UBUNTU_VERSION=18.04
 
-ARG ARCH=
-ARG CUDA=10.1
-ARG CUDNN=7.6.4.38-1
-ARG CUDNN_MAJOR_VERSION=7
-ARG LIB_DIR_PREFIX=x86_64
-ARG LIBNVINFER=6.0.1-1
-ARG LIBNVINFER_MAJOR_VERSION=6
-
-# Needed for string substitution
-SHELL ["/bin/bash", "-c"]
+ENV ARCH=
+ENV CUDA 10.1
+ENV CUDNN=7.6.4.38-1
+ENV CUDNN_MAJOR_VERSION=7
+ENV LIB_DIR_PREFIX=x86_64
+ENV LIBNVINFER=6.0.1-1
+ENV LIBNVINFER_MAJOR_VERSION=6
 
 ENV CUDNN_VERSION 7.6.4.38-1
 LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
@@ -32,12 +29,12 @@ LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cuda-command-line-tools-$CUDA_PKG_VERSION \
-    libcudnn7=$CUDNN_VERSION-1+cuda10.1 \
-    cuda-nvrtc-${CUDA/./-} \
-    cuda-cufft-${CUDA/./-} \
-    cuda-curand-${CUDA/./-} \
-    cuda-cusolver-${CUDA/./-} \
-    cuda-cusparse-${CUDA/./-} \
+    libcudnn7=$CUDNN_VERSION+cuda10.1 \
+    cuda-nvrtc-$CUDA_PKG_VERSION \
+    cuda-cufft-$CUDA_PKG_VERSION \
+    cuda-curand-$CUDA_PKG_VERSION \
+    cuda-cusolver-$CUDA_PKG_VERSION \
+    cuda-cusparse-$CUDA_PKG_VERSION \
     libfreetype6-dev \
     libhdf5-serial-dev \
     libzmq3-dev \
@@ -49,8 +46,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install TensorRT if not building for PowerPC
 RUN [[ "${ARCH}" = "ppc64le" ]] || { apt-get update && \
-        apt-get install -y --no-install-recommends libnvinfer${LIBNVINFER_MAJOR_VERSION}=${LIBNVINFER}+cuda${CUDA} \
-        libnvinfer-plugin${LIBNVINFER_MAJOR_VERSION}=${LIBNVINFER}+cuda${CUDA} \
+        apt-get install -y --no-install-recommends libnvinfer${LIBNVINFER_MAJOR_VERSION}=${LIBNVINFER}+cuda$CUDA \
+        libnvinfer-plugin${LIBNVINFER_MAJOR_VERSION}=${LIBNVINFER}+cuda$CUDA \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/*; }
 
@@ -72,9 +69,6 @@ RUN pip --no-cache-dir install --upgrade \
     setuptools && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
-
-# Some TF tools expect a "python" binary
-RUN ln -s $(which python3) /usr/local/bin/python
 
 #From Jupyter Dockerfile
 # Install Tensorflow
