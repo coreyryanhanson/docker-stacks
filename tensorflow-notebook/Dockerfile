@@ -60,6 +60,9 @@ RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/lib
     && echo "/usr/local/cuda/lib64/stubs" > /etc/ld.so.conf.d/z-cuda-stubs.conf \
     && ldconfig
 
+COPY bashrc /etc/bash.bashrc
+RUN chmod a+rwx /etc/bash.bashrc
+
 USER $NB_UID
 
 # See http://bugs.python.org/issue19846
@@ -76,6 +79,3 @@ RUN pip install --quiet --no-cache-dir \
     'tensorflow' && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
-
-COPY bashrc /etc/bash.bashrc
-RUN chmod a+rwx /etc/bash.bashrc
