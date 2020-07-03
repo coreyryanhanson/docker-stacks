@@ -1,6 +1,5 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-# This is a fork of Jupyter's Dockerfile repository with minimal modifications to the base docker image.
 
 # Ubuntu 18.04 (bionic) CUDA 10.1 Base Image
 # OS/ARCH: linux/amd64
@@ -9,7 +8,7 @@ ARG BASE_CONTAINER=$ROOT_CONTAINER
 FROM $BASE_CONTAINER
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
-ARG NB_USER="anacuda"
+ARG NB_USER="jovyan"
 ARG NB_UID="1000"
 ARG NB_GID="100"
 
