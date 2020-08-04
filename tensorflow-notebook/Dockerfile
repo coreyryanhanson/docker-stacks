@@ -72,8 +72,9 @@ RUN pip --no-cache-dir install --upgrade \
     fix-permissions /home/$NB_USER
 
 #From Jupyter Dockerfile
-# Install Tensorflow
+# Install Tensorflow and CuPy
 RUN pip install --quiet \
+    'cupy-cuda101' \
     'tensorflow==2.1.0' && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
