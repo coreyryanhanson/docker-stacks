@@ -1,6 +1,7 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 # This is a fork of Jupyter's Dockerfile repository with minimal modifications to the base docker image.
+# CuPy is also added to this image at the end via pip which can leverage the GPU for Numpy calculations.
 
 ARG BASE_CONTAINER=coreyhanson/anacuda-minimal
 FROM $BASE_CONTAINER
@@ -83,3 +84,9 @@ RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
 USER $NB_UID
 
 WORKDIR $HOME
+
+# Installs CuPy
+RUN pip install --no-cache-dir \
+    'cupy-cuda101' && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
