@@ -11,7 +11,7 @@ FROM $BASE_CONTAINER
 
 USER $NB_UID
 
-RUN conda install --quiet --yes \
+RUN conda install --quiet --yes python=$PYTHON_VERSION \
     'ipython' \
     'pyyaml' \
     'ninja' \

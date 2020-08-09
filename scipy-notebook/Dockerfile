@@ -18,7 +18,7 @@ RUN apt-get update && \
 USER $NB_UID
 
 # Install Python 3 packages
-RUN conda install --quiet --yes \
+RUN conda install --quiet --yes python=$PYTHON_VERSION \
     'beautifulsoup4=4.9.*' \
     'conda-forge::blas=*=openblas' \
     'bokeh=2.1.*' \
