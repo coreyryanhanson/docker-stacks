@@ -11,7 +11,8 @@ FROM $BASE_CONTAINER
 
 USER $NB_UID
 
-RUN conda install --quiet --yes python=$PYTHON_VERSION \
+RUN source activate $CONDA_ROOT && \
+    conda install --quiet --yes python=$PYTHON_VERSION \
     'ipython' \
     'pyyaml' \
     'ninja' \
@@ -21,8 +22,6 @@ RUN conda install --quiet --yes python=$PYTHON_VERSION \
     'torchvision==0.2.2' \
     cudatoolkit=${CUDA} && \
     conda clean --all -f -y && \
-    jupyter lab build -y && \
-    jupyter lab clean -y && \
     npm cache clean --force && \
     rm -rf /home/$NB_USER/.cache/yarn && \
     fix-permissions $CONDA_DIR && \

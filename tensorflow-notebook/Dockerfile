@@ -36,7 +36,8 @@ ENV LANG C.UTF-8
 
 #From Jupyter Dockerfile
 # Installs Tensorflow
-RUN pip install --no-cache-dir \
+RUN source activate $CONDA_ROOT && \
+    pip install --no-cache-dir \
     'tensorflow==2.1.0' && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER

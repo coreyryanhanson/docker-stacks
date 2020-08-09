@@ -17,8 +17,23 @@ RUN apt-get update && \
 
 USER $NB_UID
 
+# Creates a root environment to install packages to for use within jupyter and better facilitate hardlinks between conda enviroments.
+ENV CONDA_ROOT=main
+RUN conda create -y --name $CONDA_ROOT python=$PYTHON_VERSION && \
+    source activate $CONDA_ROOT && \
+    conda config --env --prepend channels conda-forge && \
+    conda config --env --set auto_update_conda false && \
+    conda config --env --set show_channel_urls true && \
+    conda config --env --set channel_priority strict && \
+    conda update --all --quiet --yes && \
+    conda clean --all -f -y && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
 # Install Python 3 packages
-RUN conda install --quiet --yes python=$PYTHON_VERSION \
+RUN source activate $CONDA_ROOT && \
+    conda install --quiet --yes python=$PYTHON_VERSION \
     'beautifulsoup4=4.9.*' \
     'conda-forge::blas=*=openblas' \
     'bokeh=2.1.*' \
@@ -29,7 +44,6 @@ RUN conda install --quiet --yes python=$PYTHON_VERSION \
     'dill=0.3.*' \
     'h5py=2.10.*' \
     'hdf5=1.10.*' \
-    'ipywidgets=7.5.*' \
     'ipympl=0.5.*'\
     'matplotlib-base=3.2.*' \
     # numba update to 0.49 fails resolving deps.
@@ -47,11 +61,15 @@ RUN conda install --quiet --yes python=$PYTHON_VERSION \
     'statsmodels=0.11.*' \
     'sympy=1.6.*' \
     'vincent=0.4.*' \
-    'widgetsnbextension=3.5.*'\
     'xlrd=1.2.*' \
     && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
+    source activate base && \
+    conda install --quiet --yes python=$PYTHON_VERSION \
+    'ipywidgets=7.5.*' \
+    'widgetsnbextension=3.5.*' && \
+    conda clean --all -f -y && \
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # Also activate ipywidgets extension for JupyterLab
     # Check this URL for most recent compatibilities
@@ -78,7 +96,8 @@ RUN git clone https://github.com/PAIR-code/facets.git && \
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 
-RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
+RUN source activate $CONDA_ROOT && \
+    MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
     fix-permissions "/home/${NB_USER}"
 
 USER $NB_UID
@@ -86,7 +105,18 @@ USER $NB_UID
 WORKDIR $HOME
 
 # Installs CuPy
-RUN pip install --no-cache-dir \
+RUN source activate $CONDA_ROOT && \
+    pip install --no-cache-dir \
     'cupy-cuda101' && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
+
+RUN jupyter kernelspec list
+
+# Creates the base kernel for use in the Jupyter notebook.
+RUN source activate $CONDA_ROOT && \
+    python -m ipykernel install --prefix=/opt/conda/ --name $CONDA_ROOT --display-name "Python $PYTHON_VERSION ($CONDA_ROOT)" && \
+    source activate base && \
+    echo "y" | jupyter kernelspec remove python3 && \
+    sed -i -e '$ac.KernelSpecManager.ensure_native_kernel = False' /etc/jupyter/jupyter_notebook_config.py
+
