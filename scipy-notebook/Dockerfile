@@ -33,7 +33,7 @@ RUN conda create -y --name $CONDA_ROOT python=$PYTHON_VERSION && \
 
 # Install Python 3 packages
 RUN source activate $CONDA_ROOT && \
-    conda install --quiet --yes python=$PYTHON_VERSION \
+    conda install --quiet --yes \
     'beautifulsoup4=4.9.*' \
     'conda-forge::blas=*=openblas' \
     'bokeh=2.1.*' \
@@ -66,7 +66,7 @@ RUN source activate $CONDA_ROOT && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     source activate base && \
-    conda install --quiet --yes python=$PYTHON_VERSION \
+    conda install --quiet --yes \
     'ipywidgets=7.5.*' \
     'widgetsnbextension=3.5.*' && \
     conda clean --all -f -y && \

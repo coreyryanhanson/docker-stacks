@@ -111,7 +111,7 @@ RUN conda install --quiet --yes python=$PYTHON_VERSION 'tini=0.18.0' && \
 # Correct permissions
 # Do all this in a single RUN command to avoid duplicating all of the
 # files across image layers when the permissions change
-RUN conda install --quiet --yes python=$PYTHON_VERSION \
+RUN conda install --quiet --yes \
     'notebook=6.0.3' \
     'jupyterhub=1.1.0' \
     'jupyterlab=2.1.5' && \

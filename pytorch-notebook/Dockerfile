@@ -12,7 +12,7 @@ FROM $BASE_CONTAINER
 USER $NB_UID
 
 RUN source activate $CONDA_ROOT && \
-    conda install --quiet --yes python=$PYTHON_VERSION \
+    conda install --quiet --yes \
     'ipython' \
     'pyyaml' \
     'ninja' \

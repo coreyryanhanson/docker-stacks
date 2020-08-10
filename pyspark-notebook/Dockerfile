@@ -43,7 +43,7 @@ USER $NB_UID
 
 # Install pyarrow
 RUN source activate $CONDA_ROOT && \
-    conda install --quiet -y python=$PYTHON_VERSION 'pyarrow' && \
+    conda install --quiet -y 'pyarrow' && \
     conda clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
