@@ -18,8 +18,8 @@ RUN source activate $CONDA_ROOT && \
     'ninja' \
     'cython' && \
     conda install --quiet --yes -c pytorch \
-    'pytorch==1.3.0' \
-    'torchvision==0.2.2' \
+    'pytorch==1.6.0' \
+    'torchvision==0.7.0' \
     cudatoolkit=${CUDA} && \
     conda clean --all -f -y && \
     npm cache clean --force && \
