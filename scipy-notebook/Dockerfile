@@ -10,10 +10,10 @@ LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 
 USER root
 
-# ffmpeg for matplotlib anim & dvipng for latex labels
+# ffmpeg for matplotlib anim & dvipng+cm-super for latex labels
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg dvipng && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends ffmpeg dvipng cm-super && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
 
@@ -36,40 +36,35 @@ RUN source activate $CONDA_ROOT && \
     conda install --quiet --yes \
     'beautifulsoup4=4.9.*' \
     'conda-forge::blas=*=openblas' \
-    'bokeh=2.1.*' \
+    'bokeh=2.2.*' \
     'bottleneck=1.3.*' \
-    'cloudpickle=1.5.*' \
+    'cloudpickle=1.6.*' \
     'cython=0.29.*' \
-    'dask=2.20.*' \
+    'dask=2020.12.*' \
     'dill=0.3.*' \
-    'h5py=2.10.*' \
-    'hdf5=1.10.*' \
+    'h5py=3.1.*' \
+    'ipywidgets=7.6.*' \
     'ipympl=0.5.*'\
-    'matplotlib-base=3.2.*' \
-    # numba update to 0.49 fails resolving deps.
-    'numba=0.48.*' \
+    'matplotlib-base=3.3.*' \
+    'numba=0.52.*' \
     'numexpr=2.7.*' \
     'pandas=1.1.*' \
     'patsy=0.5.*' \
-    'protobuf=3.12.*' \
+    'protobuf=3.14.*' \
     'pytables=3.6.*' \
-    'scikit-image=0.17.*' \
-    'scikit-learn=0.23.*' \
+    'scikit-image=0.18.*' \
+    'scikit-learn=0.24.*' \
     'scipy=1.5.*' \
-    'seaborn=0.10.*' \
+    'seaborn=0.11.*' \
     'sqlalchemy=1.3.*' \
-    'statsmodels=0.11.*' \
-    'sympy=1.6.*' \
+    'statsmodels=0.12.*' \
+    'sympy=1.7.*' \
     'vincent=0.4.*' \
+    'widgetsnbextension=3.5.*'\
     'xlrd=1.2.*' \
     && \
     conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
-    source activate base && \
-    conda install --quiet --yes \
-    'ipywidgets=7.5.*' \
-    'widgetsnbextension=3.5.*' && \
-    conda clean --all -f -y && \
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # Also activate ipywidgets extension for JupyterLab
     # Check this URL for most recent compatibilities
@@ -96,27 +91,9 @@ RUN git clone https://github.com/PAIR-code/facets.git && \
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 
-RUN source activate $CONDA_ROOT && \
-    MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
+RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
     fix-permissions "/home/${NB_USER}"
 
 USER $NB_UID
 
 WORKDIR $HOME
-
-# Installs CuPy
-RUN source activate $CONDA_ROOT && \
-    pip install --no-cache-dir \
-    'cupy-cuda101' && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
-RUN jupyter kernelspec list
-
-# Creates the base kernel for use in the Jupyter notebook.
-RUN source activate $CONDA_ROOT && \
-    python -m ipykernel install --prefix=/opt/conda/ --name $CONDA_ROOT --display-name "Python $PYTHON_VERSION ($CONDA_ROOT)" && \
-    source activate base && \
-    echo "y" | jupyter kernelspec remove python3 && \
-    sed -i -e '$ac.KernelSpecManager.ensure_native_kernel = False' /etc/jupyter/jupyter_notebook_config.py
-
