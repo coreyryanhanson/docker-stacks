@@ -15,40 +15,48 @@ FROM $BASE_CONTAINER
 
 USER root
 
-ARG UBUNTU_VERSION=18.04
+ARG UBUNTU_VERSION=20.04
 
 ENV ARCH=
-ENV CUDA 10.1
-ENV CUDNN 7.6.4.38-1
-ENV CUDNN_MAJOR_VERSION=7
+ENV CUDA 11.0.3
+ENV CUDNN 8.0.5.39
+ENV CUDNN_MAJOR_VERSION=8
 ENV LIB_DIR_PREFIX=x86_64
-ENV LIBNVINFER=6.0.1-1
-ENV LIBNVINFER_MAJOR_VERSION=6
+ENV LIBNVINFER=7.1.3-1
+ENV LIBNVINFER_MAJOR_VERSION=7
+ENV NCCL_VERSION 2.8.3
 
 LABEL com.nvidia.cudnn.version="${CUDNN}"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    cuda-command-line-tools-$CUDA_PKG_VERSION \
-    libcudnn7=$CUDNN+cuda10.1 \
-    libcudnn7-dev=$CUDNN+cuda10.1 \
-    cuda-nvrtc-$CUDA_PKG_VERSION \
-    cuda-cufft-$CUDA_PKG_VERSION \
-    cuda-curand-$CUDA_PKG_VERSION \
-    cuda-cusolver-$CUDA_PKG_VERSION \
-    cuda-cusparse-$CUDA_PKG_VERSION \
-    cuda-libraries-dev-$CUDA_PKG_VERSION \
-    cuda-minimal-build-$CUDA_PKG_VERSION \
-    cuda-nvml-dev-$CUDA_PKG_VERSION \
-    libcublas-dev=10.2.1.243-1 \
+    cuda-command-line-tools-11-0=11.0.3-1 \
+    libcudnn8=$CUDNN_VERSION-1+cuda11.0 \
+    libcudnn8-dev=$CUDNN_VERSION-1+cuda11.0 \
+    cuda-nvrtc-$CUDA \
+    cuda-cudart-dev-11-0=11.0.221-1 \
+    libcufft-$CUDA \
+    libcurand-$CUDA \
+    libcusolver-$CUDA \
+    libcusparse-$CUDA \
+    cuda-libraries-dev-11-0=11.0.3-1 \
+    cuda-minimal-build-11-0=11.0.3-1 \
+    cuda-nvml-dev-11-0=11.0.167-1 \
+    libcublas-dev-11-0=11.2.0.252-1 \
     libfreetype6-dev \
     libhdf5-serial-dev \
-    libnccl-dev=$NCCL_VERSION-1+cuda$CUDA \
+    libtinfo5 libncursesw5 \
+    libnpp-dev-11-0=11.1.0.245-1 \
+    libnccl-dev=2.8.3-1+cuda11.0 \
+    libcusparse-11-0=11.1.1.245-1 \
+    libcusparse-dev-11-0=11.1.1.245-1 \
     libzmq3-dev \
     pkg-config \
     software-properties-common \
 && \
-    apt-mark hold libcudnn7 && \
+    apt-mark hold libcublas-dev-11-0 libnccl-dev libcudnn8 && \
     rm -rf /var/lib/apt/lists/*
+
+ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs
 
 USER $NB_UID
