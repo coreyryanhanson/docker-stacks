@@ -1,11 +1,11 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
-ARG BASE_CONTAINER=coreyhanson/anacuda-devel-cudnn
+ARG BASE_CONTAINER=coreyhanson/anacuda-cuda-base
 FROM $BASE_CONTAINER
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
-
+git 
 # Modifications to allow use of Tensorflow using NVIDIA GPUs.
 # From https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/dockerfiles/dockerfiles/gpu.Dockerfile
 
