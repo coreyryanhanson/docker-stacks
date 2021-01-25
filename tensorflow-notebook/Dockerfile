@@ -39,12 +39,16 @@ ENV LANG C.UTF-8
 #   tf-nightly-gpu
 # Set --build-arg TF_PACKAGE_VERSION=1.11.0rc0 to install a specific version.
 # Installs the latest version by default.
-ARG TF_PACKAGE=tensorflow
-ARG TF_PACKAGE_VERSION=2.3.0
+ARG TF_PACKAGE=tf-nightly-gpu
+ARG TF_PACKAGE_VERSION=2.5.0.dev20210124
 RUN source activate $CONDA_ROOT && \
     pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
+USER root
+
 COPY bashrc /etc/bash.bashrc
 RUN chmod a+rwx /etc/bash.bashrc
+
+USER $NB_UID
