@@ -12,6 +12,6 @@ FROM $BASE_CONTAINER
 USER $NB_UID
 
 RUN source activate $CONDA_ROOT && \
-    pip install --no-cache-di torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+    pip install --no-cache-dir torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
 
 
