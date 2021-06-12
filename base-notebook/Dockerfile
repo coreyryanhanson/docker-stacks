@@ -45,7 +45,6 @@ ARG miniforge_checksum="9eb335cb559644a6e462c077ebc129af51b7329817574fb707b994da
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update --yes && \
     apt-get install --yes --no-install-recommends \
-    tini \
     wget \
     ca-certificates \
     sudo \
@@ -115,7 +114,8 @@ RUN wget --quiet "https://github.com/conda-forge/miniforge/releases/download/${m
     conda list python | grep '^python ' | tr -s ' ' | cut -d '.' -f 1,2 | sed 's/$/.*/' >> "${CONDA_DIR}/conda-meta/pinned" && \
     conda install --quiet --yes \
     "conda=${CONDA_VERSION}" \
-    'pip' && \
+    'pip' \
+    'tini=0.18.0' && \
     conda update --all --quiet --yes && \
     conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
     conda clean --all -f -y && \
