@@ -11,8 +11,8 @@ LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 USER root
 
 # ffmpeg for matplotlib anim & dvipng+cm-super for latex labels
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg dvipng cm-super && \
+RUN apt-get update --yes && \
+    apt-get install --yes --no-install-recommends ffmpeg dvipng cm-super && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
@@ -34,32 +34,32 @@ RUN conda create -y --name $CONDA_ROOT python=$PYTHON_VERSION && \
 # Install Python 3 packages
 RUN source activate $CONDA_ROOT && \
     conda install --quiet --yes \
+    'altair=4.1.*' \
     'beautifulsoup4=4.9.*' \
-    'conda-forge::blas=*=openblas' \
-    'bokeh=2.2.*' \
+    'bokeh=2.3.*' \
     'bottleneck=1.3.*' \
     'cloudpickle=1.6.*' \
+    'conda-forge::blas=*=openblas' \
     'cython=0.29.*' \
-    'dask=2021.1.*' \
+    'dask=2021.5.*' \
     'dill=0.3.*' \
-    'h5py=3.1.*' \
+    'h5py=3.2.*' \
+    'ipympl=0.7.*'\
     'ipywidgets=7.6.*' \
-    'ipympl=0.6.*'\
-    'matplotlib-base=3.3.*' \
-    'numba=0.52.*' \
+    'matplotlib-base=3.4.*' \
+    'numba=0.53.*' \
     'numexpr=2.7.*' \
     'pandas=1.2.*' \
     'patsy=0.5.*' \
-    'protobuf=3.14.*' \
+    'protobuf=3.17.*' \
     'pytables=3.6.*' \
     'scikit-image=0.18.*' \
     'scikit-learn=0.24.*' \
     'scipy=1.6.*' \
     'seaborn=0.11.*' \
-    'sqlalchemy=1.3.*' \
+    'sqlalchemy=1.4.*' \
     'statsmodels=0.12.*' \
-    'sympy=1.7.*' \
-    'vincent=0.4.*' \
+    'sympy=1.8.*' \
     'widgetsnbextension=3.5.*'\
     'xlrd=2.0.*' && \
     conda clean --all -f -y && \
@@ -81,22 +81,6 @@ RUN source activate $CONDA_ROOT && \
     MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
     fix-permissions "/home/${NB_USER}"
 
-USER $NB_UID
+USER ${NB_UID}
 
-WORKDIR $HOME
-
-# Installs CuPy
-RUN source activate $CONDA_ROOT && \
-    pip install --no-cache-dir \
-    'cupy-cuda101' && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
-RUN jupyter kernelspec list
-
-# Creates the base kernel for use in the Jupyter notebook.
-RUN source activate $CONDA_ROOT && \
-    python -m ipykernel install --prefix=/opt/conda/ --name $CONDA_ROOT --display-name "Python $PYTHON_VERSION ($CONDA_ROOT)" && \
-    source activate base && \
-    echo "y" | jupyter kernelspec remove python3 && \
-    sed -i -e '$ac.KernelSpecManager.ensure_native_kernel = False' /etc/jupyter/jupyter_notebook_config.py
+WORKDIR "${HOME}"
