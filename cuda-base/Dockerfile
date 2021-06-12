@@ -15,8 +15,7 @@ ARG UBUNTU_VERSION=18.04
 
 ENV ARCH=
 ENV CUDA 11.1
-ENV CUDNN=8.0.5.39
-ENV CUDNN_VERSION="${CUDNN}"
+ENV CUDNN=8.0.5.39-1
 ENV CUDNN_MAJOR_VERSION=8
 ENV LIB_DIR_PREFIX=x86_64
 ENV LIBNVINFER=7.2.2-1
@@ -35,7 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libcurand-${CUDA/./-} \
     libcusolver-${CUDA/./-} \
     libcusparse-${CUDA/./-} \
-    libcudnn8=$CUDNN_VERSION-1+cuda${CUDA/./-} \
+    libcudnn8=${CUDNN}+cuda${CUDA} \
     libfreetype6-dev \
     libhdf5-serial-dev \
     libzmq3-dev \
