@@ -27,14 +27,15 @@ LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    cuda-command-line-tools-11-1=11.1.1-1 \
-    libcublas-dev-11-1=11.3.0.106-1 \
+    cuda-command-line-tools-${CUDA/./-} \
+    libcublas-${CUDA/./-} \
+    libcublas-dev-${CUDA/./-} \
     cuda-nvrtc-${CUDA/./-} \
     libcufft-${CUDA/./-} \
     libcurand-${CUDA/./-} \
     libcusolver-${CUDA/./-} \
-    libcusparse-11-1=11.3.0.10-1 \
-    libcudnn8=$CUDNN_VERSION-1+cuda11.1 \
+    libcusparse-${CUDA/./-} \
+    libcudnn8=$CUDNN_VERSION-1+cuda${CUDA/./-} \
     libfreetype6-dev \
     libhdf5-serial-dev \
     libzmq3-dev \
