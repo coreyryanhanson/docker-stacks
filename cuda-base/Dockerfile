@@ -24,6 +24,8 @@ ENV NCCL_VERSION 2.8.4
 
 LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
 
+SHELL ["/bin/bash", "-c"]
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cuda-command-line-tools-${CUDA/./-} \
@@ -46,5 +48,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs
+
 
 USER $NB_UID
