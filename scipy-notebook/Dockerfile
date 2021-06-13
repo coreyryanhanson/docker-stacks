@@ -84,3 +84,19 @@ RUN source activate $CONDA_ROOT && \
 USER ${NB_UID}
 
 WORKDIR "${HOME}"
+
+# Installs CuPy
+RUN source activate $CONDA_ROOT && \
+    pip install --no-cache-dir \
+    'cupy-cuda101' && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+RUN jupyter kernelspec list
+
+# Creates the base kernel for use in the Jupyter notebook.
+RUN source activate $CONDA_ROOT && \
+    python -m ipykernel install --prefix=/opt/conda/ --name $CONDA_ROOT --display-name "Python $PYTHON_VERSION ($CONDA_ROOT)" && \
+    source activate base && \
+    echo "y" | jupyter kernelspec remove python3 && \
+    sed -i -e '$ac.KernelSpecManager.ensure_native_kernel = False' /etc/jupyter/jupyter_notebook_config.py
