@@ -27,11 +27,11 @@ USER ${NB_UID}
 
 # R packages including IRKernel which gets installed globally.
 RUN conda install --quiet --yes \
-    'r-base=4.0.5' \
+    'r-base=4.1.0' \
     'r-caret=6.*' \
     'r-crayon=1.4*' \
     'r-devtools=2.4*' \
-    'r-forecast=8.14*' \
+    'r-forecast=8.15*' \
     'r-hexbin=1.28*' \
     'r-htmltools=0.5*' \
     'r-htmlwidgets=1.5*' \
@@ -39,7 +39,7 @@ RUN conda install --quiet --yes \
     'r-nycflights13=1.0*' \
     'r-randomforest=4.6*' \
     'r-rcurl=1.98*' \
-    'r-rmarkdown=2.8*' \
+    'r-rmarkdown=2.9*' \
     'r-rodbc=1.3*' \
     'r-rsqlite=2.2*' \
     'r-shiny=1.6*' \

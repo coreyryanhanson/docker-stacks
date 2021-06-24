@@ -41,7 +41,7 @@ RUN source activate $CONDA_ROOT && \
     'cloudpickle=1.6.*' \
     'conda-forge::blas=*=openblas' \
     'cython=0.29.*' \
-    'dask=2021.5.*' \
+    'dask=2021.6.*' \
     'dill=0.3.*' \
     'h5py=3.2.*' \
     'ipympl=0.7.*'\
@@ -49,6 +49,7 @@ RUN source activate $CONDA_ROOT && \
     'matplotlib-base=3.4.*' \
     'numba=0.53.*' \
     'numexpr=2.7.*' \
+    'numpy=1.20.*' \
     'pandas=1.2.*' \
     'patsy=0.5.*' \
     'protobuf=3.17.*' \

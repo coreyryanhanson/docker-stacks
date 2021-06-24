@@ -16,9 +16,9 @@ USER root
 # Default values can be overridden at build time
 # (ARGS are in lower case to distinguish them from ENV)
 # Check https://julialang.org/downloads/
-ARG julia_version="1.6.0"
+ARG julia_version="1.6.1"
 # SHA256 checksum
-ARG julia_checksum="463b71dc70ca7094c0e0fd6d55d130051a7901e8dec5eb44d6002c57d1bd8585"
+ARG julia_checksum="7c888adec3ea42afbfed2ce756ce1164a570d50fa7506c3f2e1e2cbc49d52506"
 
 # R pre-requisites
 RUN apt-get update --yes && \
@@ -56,11 +56,11 @@ USER ${NB_UID}
 
 # R packages including IRKernel which gets installed globally.
 RUN conda install --quiet --yes \
-    'r-base=4.0.5' \
+    'r-base=4.1.0' \
     'r-caret=6.0*' \
     'r-crayon=1.4*' \
     'r-devtools=2.4*' \
-    'r-forecast=8.14*' \
+    'r-forecast=8.15*' \
     'r-hexbin=1.28*' \
     'r-htmltools=0.5*' \
     'r-htmlwidgets=1.5*' \
@@ -68,7 +68,7 @@ RUN conda install --quiet --yes \
     'r-nycflights13=1.0*' \
     'r-randomforest=4.6*' \
     'r-rcurl=1.98*' \
-    'r-rmarkdown=2.8*' \
+    'r-rmarkdown=2.9*' \
     'r-rodbc=1.3*' \
     'r-rsqlite=2.2*' \
     'r-shiny=1.6*' \

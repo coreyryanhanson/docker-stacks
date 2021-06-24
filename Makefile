@@ -38,6 +38,7 @@ build-test-all: $(foreach I,$(ALL_IMAGES), build/$(I) test/$(I) ) ## build and t
 
 check-outdated/%: ## check the outdated conda packages in a stack and produce a report (experimental)
 	@TEST_IMAGE="$(OWNER)/$(notdir $@)" pytest test/test_outdated.py
+check-outdated-all: $(foreach I,$(ALL_IMAGES), check-outdated/$(I) ) ## check all the stacks for outdated conda packages
 
 cont-clean-all: cont-stop-all cont-rm-all ## clean all containers (stop + rm)
 
@@ -59,7 +60,7 @@ dev-env: ## install libraries required to build docs and run tests
 	@pip install -r requirements-dev.txt
 
 docs: ## build HTML documentation
-	make -C docs html
+	sphinx-build docs/ docs/_build/
 
 git-commit: LOCAL_PATH?=.
 git-commit: GITHUB_SHA?=$(shell git rev-parse HEAD)
